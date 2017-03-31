@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 import pyaudio
 import wave
 from pyAudioAnalysis import audioTrainTest as aT
@@ -63,17 +63,18 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-	record()
-	save(WAVE_OUTPUT_FILENAME)
-	ans = classify(WAVE_OUTPUT_FILENAME)
- 	return "Hello, World!\n" + ans['class']
+	# record()
+	# save(WAVE_OUTPUT_FILENAME)
+	# ans = classify(WAVE_OUTPUT_FILENAME)
+ # 	return "Hello, World!\n" + ans['class']
+ 	return render_template('index.html')
 
-@app.route('/api/get_messages', methods = ['GET'])
-def get_messages():
+@app.route('/api/get_messages/<string:filename>', methods = ['GET'])
+def get_messages(filename):
     # json = request.get_json()
     # if json['user'] == "larry":
     #     return jsonify({'messages':['test1', 'test2']})
     record()
-    save(WAVE_OUTPUT_FILENAME)
-    ans = classify(WAVE_OUTPUT_FILENAME)
+    save(filename)
+    ans = classify(filename)
     return jsonify(ans)
